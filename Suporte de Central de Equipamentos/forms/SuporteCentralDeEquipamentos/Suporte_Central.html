@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Fluig-->
+    <script src="/webdesk/vcXMLRPC.js"></script>
+    <link rel="stylesheet" type="text/css" href="/style-guide/css/fluig-style-guide.min.css" />
+    <script src="/resources/js/jquery/jquery.js"></script>
+    <script src="/resources/js/jquery/jquery-ui.min.js"></script>
+    <script src="/resources/js/mustache/mustache-min.js"></script>
+    <script src="/style-guide/js/fluig-style-guide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="select2-pt-BR.js"></script>
+
+    <!--React-->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!--Processo-->
+    <link rel="stylesheet" href="Style.css" />
+    <script src="Calendar.jsx" type="text/babel"></script>
+    <script src="Functions.js" type="text/babel"></script>
+    <script src="Script.js" type="text/babel"></script>
+</head>
+
+<body class="fluig-style-guide">
+    <form name="form" role="form">
+        <div id="divCollapse">
+            <ul id="coltabs" class="nav nav-tabs nav-justified nav-pills" role="tablist"
+                style="padding-bottom: 0px; width: 100%">
+                <li class="collapse-tab active">
+                    <a href="#tabInfoChamado" role="tab" id="atabInfoChamado" data-toggle="tab" aria-expanded="true"
+                        class="tab">Informações do Chamado</a>
+                </li>
+                <li class="collapse-tab">
+                    <a href="#tabHistorico" role="tab" id="atabHistorico" data-toggle="tab" aria-expanded="true"
+                        class="tab">Histórico</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tabInfoChamado">
+                    <!--
+					<div style="border: red 1px solid; width: 100%; text-align: center; color: red;" id="divComunicado">
+					</div>
+					<br>
+					-->
+                    <div class="form-input">
+                        <label>Categoria:</label>
+                        <strong class="strongAlert">*</strong>
+                        <select name="categoria" id="categoria" class="form-control inputInfoChamado">
+                            <option value=""></option>
+                            <option value="Agendamento de Curso / Orientação">Agendamento de Curso / Orientação</option>
+                            <option value="Alteração Motivo da Falha">Alteração Motivo da Falha</option>
+                            <option value="Transferência Máquina Locada MA">Transferência Máquina Locada MA</option>
+                        </select>
+                        <div></div>
+                        <br />
+                    </div>
+                    <div id="divCamposCursos">
+                        <div class="form-input">
+                            <label>Curso:</label>
+                            <strong class="strongAlert">*</strong>
+                            <select name="curso" id="curso" class="form-control inputCurso">
+                                <option value=""></option>
+                                <optgroup label="Mobile">
+                                    <option value="Mobile - Abastecimentos">Abastecimentos</option>
+                                    <option value="Mobile - Checklist">Checklist</option>
+                                </optgroup>
+                                <optgroup label="PC">
+                                    <option value="PC - Abastecimentos Frota">Abastecimentos Frota</option>
+                                    <option value="PC - Compra de Peças">Compra de Peças</option>
+                                    <option value="PC - Compra de Diesel, Óleo de Queima">Compra de Diesel, Óleo de
+                                        Queima</option>
+                                    <option value="PC - Checklist dos Equipamentos">Checklist dos Equipamentos</option>
+                                    <!-- <option value="PC - Medições de Maquinas Alugadas (MA)">Medições de Maquinas Alugadas (MA)</option>  -->
+                                </optgroup>
+                            </select>
+                            <div></div>
+                            <br />
+                        </div>
+                        <div class="form-input">
+                            <label>Obra:</label>
+                            <strong class="strongAlert">*</strong>
+                            <select name="obra" id="obra" class="form-control inputCurso">
+                            </select>
+                            <div></div>
+                            <br />
+                        </div>
+                        <div class="form-input">
+                            <label>Usuários:</label>
+                            <strong class="strongAlert">*</strong>
+                            <button class="btn btn-primary" id="btnAdicionarLinhaUsuariosCurso">Adicionar</button>
+                            <table class="table table-bordered" id="tableUsuariosCurso">
+                                <thead>
+                                    <tr>
+                                        <th>Usuário</th>
+                                        <th>E-mail para Contato <small>(opcional)</small></th>
+                                        <th>Telefone para Contato <small>(opcional)</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divTransferenciaMaquina">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-input">
+                                    <label>Prefixo:</label> <strong class="strongAlert">*</strong>
+                                    <input type="text" id="prefixoTrans" name="prefixoTrans"
+                                        class="form-control inputInfoChamado" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-input">
+                                    <label>Fornecedor:</label> <strong class="strongAlert">*</strong>
+                                    <select name="selectFornecedor" id="selectFornecedor" style="width: 100%"
+                                        class="form-control inputInfoChamado">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-input">
+                                    <label>Data de Transferência:</label> <strong class="strongAlert">*</strong>
+                                    <input id="dataTrans" name="dataTrans" class="form-control inputInfoChamado date" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-input">
+                                    <label>Valor de Locação:</label> <strong class="strongAlert">*</strong>
+                                    <input type="text" id="valorLocacao" name="valorLocacao" placeholder="R$ 0,00"
+                                        class="form-control inputInfoChamado" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-input">
+                                    <label>Obra de Origem:</label> <strong class="strongAlert">*</strong>
+                                    <select name="obraOrigem" id="obraOrigem" class="form-control inputInfoChamado">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-input">
+                                    <label>Obra de Destino:</label> <strong class="strongAlert">*</strong>
+                                    <select name="obraDestino" id="obraDestino" class="form-control inputInfoChamado">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div id="divAlteracaoFalha">
+                        <!-- Campos existentes -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-input">
+                                    <label>Prefixo:</label> <strong class="strongAlert">*</strong>
+                                    <input type="text" id="prefixoAlt" name="prefixoAlt"
+                                        class="form-control inputInfoChamado" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-input">
+                                    <label>OS Sisma:</label> <strong class="strongAlert">*</strong>
+                                    <input type="text" id="osSisma" name="osSisma" class="form-control inputInfoChamado"
+                                        maxlength="5" placeholder="Exemplo: 55555" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <!-- Novos campos agrupados -->
+                        <!--      <div id="descricaoMotivoGroup"> -->
+                        <!--         <div class="row descricao-motivo-item" data-index="1"> -->
+                        <!--             <div class="col-md-5"> -->
+                        <!--                 <div class="form-input"> -->
+                        <!--                     <label>Descrição dos Materiais:</label> -->
+                        <!--                     <textarea name="descricaoMateriais1" class="form-control" maxlength="50" rows="2"></textarea> -->
+                        <!--                 </div> -->
+                        <!--             </div> -->
+                        <!--             <div class="col-md-5"> -->
+                        <!--                 <div class="form-input"> -->
+                        <!--                     <label>Motivo da Falha:</label> -->
+                        <!--                       <textarea name="motivoFalha1" class="form-control" maxlength="50" rows="2"></textarea> -->
+                        <!--                 </div> -->
+                        <!--             </div> -->
+                        <!--             <div class="col-md-2"> -->
+                        <!--                 <button type="button" class="btn btn-danger remove-item">Excluir</button> -->
+                        <!--             </div> -->
+                        <!--         </div> -->
+                        <!--     </div> -->
+                        <div class="form-input">
+                            <!--                                 <button class="btn btn-primary" id="btnAdicionarLinhaAlteracao">Adicionar</button> -->
+                            <table class="table table-bordered" id="tableAlteracao">
+                                <thead>
+                                    <tr>
+                                        <th>Descrição dos Materiais</th>
+                                        <th>Motivo da Falha</th>
+                                        <th style="text-align: center;">
+                                            <button class="btn btn-primary"
+                                                id="btnAdicionarLinhaAlteracao">Adicionar</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="form-input">
+                            <label>Justificativa:</label><strong class="strongAlert">*</strong>
+                            <textarea name="justificativaAlteracao" id="justificativaAlteracao"
+                                class="form-control inputInfoChamado" rows="4"></textarea>
+                            <br />
+                        </div>
+                        <!--     <br /> -->
+                        <!--     <button type="button" id="addDescricaoMotivo" class="btn btn-primary">Adicionar Item</button> -->
+                    </div>
+
+
+
+
+                    <div id="divCancelamentoCurso">
+
+                    </div>
+
+                    <div id="divRelatorioDeSolicitacoes">
+
+                    </div>
+
+                    <br />
+                    <div class="form-input" id="obs">
+                        <label>
+                            Observação:
+                        </label>
+                        <textarea name="observacaoAgendamentoCurso" id="observacaoAgendamentoCurso"
+                            class="form-control inputCurso inputOpcional" rows="4"></textarea>
+                        <div></div>
+                        <br />
+                    </div>
+                    <div class="form-input">
+                        <label>
+                            Enviar cópia para:
+                            <i class="flaticon flaticon-info icon-sm" data-toggle="tooltip" data-placement="top"
+                                title="Endereços de e-mail incluidos na notificação enviada por e-mail. (Separados por ;)"></i>
+                        </label>
+                        <input type="text" class="form-control" name="email" id="email" />
+                        <br />
+                    </div>
+                </div>
+                <div class="tab-pane" id="tabHistorico">
+                    <div id="divHistorico"></div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div id="divResolucaoChamado" class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Resolução</h3>
+            </div>
+            <div class="panel-body">
+                <div id="divDecisao">
+                    <div class="form-input form-input-checkbox">
+                        <input type="radio" name="decisao" id="decisaoEnviar" value="Enviar" class="radioDecisao" />
+                        <label for="decisaoEnviar">Encerrar</label>
+                    </div>
+                    <div class="form-input form-input-checkbox">
+                        <input type="radio" name="decisao" id="decisaoRetornar" value="Retornar" class="radioDecisao" />
+                        <label for="decisaoRetornar">Retornar</label>
+                    </div>
+                </div>
+                <div id="divInfoResolucaoChamado">
+                    <div class="form-input">
+                        <label>Responsável:</label>
+                        <select name="responsavelCurso" id="responsavelCurso" class="form-control" style="width: 50%;">
+
+                        </select>
+                        <br />
+                    </div>
+                    <div class="form-input">
+                        <label>Solução:</label>
+                        <textarea name="solucao" id="solucao" class="form-control inputResolucaoChamado" rows="3"
+                            placeholder="Informe a solução encontrada"></textarea>
+                        <div></div>
+                    </div>
+                </div>
+                <div id="divInfoObservacao">
+                    <div class="form-input">
+                        <label>Prazo de retorno:</label>
+                        <input type="text" id="data_prazo_retorno" name="data_prazo_retorno"
+                            class="form-control inputObservacao" />
+                        <div></div>
+                        <br />
+                    </div>
+                    <div class="form-input">
+                        <label>Observação:</label>
+                        <textarea name="observacao" id="observacao" class="form-control inputObservacao"
+                            rows="3"></textarea>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden" style="display: none">
+            <input type="hidden" id="solicitante" name="solicitante" />
+            <input type="hidden" id="atendimento" name="atendimento" />
+            <input type="hidden" id="atividade" name="atividade" />
+            <input type="hidden" id="formMode" name="formMode" />
+            <input type="hidden" id="numProces" name="numProces" />
+            <input type="hidden" id="userCode" name="userCode" />
+            <input type="hidden" name="obraHidden" id="obraHidden">
+            <input type="hidden" name="responsavelHidden" id="responsavelHidden">
+            <input type="hidden" name="inputCursoDiaAgendado" id="inputCursoDiaAgendado">
+            <input type="hidden" name="inputCursoHorarioAgendado" id="inputCursoHorarioAgendado">
+            <input type="hidden" name="inputCursoUsuariosJSON" id="inputCursoUsuariosJSON">
+            <input type="hidden" id="inputAlteracoesJSON" name="inputAlteracoesJSON">
+            <input type="hidden" name="solicitacaoCancelamentoCurso" id="solicitacaoCancelamentoCurso">
+        </div>
+
+        <script>
+            var beforeSendValidate = function (numState, nextState) {
+                SalvaDadosAlteracao()
+                return ValidaCampos();
+            };
+        </script>
+    </form>
+</body>
+
+</html>
