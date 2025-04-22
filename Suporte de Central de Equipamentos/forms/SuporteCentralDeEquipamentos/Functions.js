@@ -640,10 +640,16 @@ function BuscaListaUsuariosSuporteCentral() {
 }
 
 function preencherObrasDoUsuario() {
-    buscarObrasDoUsuario()
+    buscarObrasDoUsuario(true)
         .then((options) => {
             var selectObra = $("#obraOrigem");
             selectObra.append("<option id='option' value=''></option>" + options);
+        })
+        .catch((error) => {
+            console.log("Erro ao buscar obras do usuário: " + error);
+        });
+    buscarObrasDoUsuario()
+        .then((options) => {
             var selectObraDestino = $("#obraDestino");
             selectObraDestino.append("<option id='option' value=''></option>" + options);
         })
