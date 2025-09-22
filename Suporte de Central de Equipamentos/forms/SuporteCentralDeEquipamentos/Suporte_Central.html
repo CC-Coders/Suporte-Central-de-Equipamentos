@@ -345,7 +345,9 @@
 
         <script>
             var beforeSendValidate = function (numState, nextState) {
-                SalvaDadosAlteracao()
+                if ($("#atividade").val() == 0 || $("#atividade").val() == 4) {
+                    SalvaDadosAlteracao();
+                }
                 return ValidaCampos();
             };
         </script>

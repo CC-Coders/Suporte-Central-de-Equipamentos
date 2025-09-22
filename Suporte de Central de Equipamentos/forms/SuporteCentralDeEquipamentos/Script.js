@@ -205,6 +205,7 @@ $(document).ready(function () {
         }
         else if (formMode == "VIEW") {
                 BuscaComplementos();
+                CriaListaAlteracoes();
                 $("#divResolucaoChamado, #divCamposCursos, #divAlteracaoFalha, #divTransferenciaMaquina").hide();
 
                 if ($("#categoria").text() == "Agendamento de Curso / Orientação") {
